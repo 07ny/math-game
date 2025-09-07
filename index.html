@@ -12,9 +12,13 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f0f4f8;
+            /* モバイルでの画面ずれを防ぐため、min-h-screenを削除 */
         }
         .container {
             transition: transform 0.3s ease-in-out;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 24px;
         }
         .container.flash-green {
             animation: flash-green 0.3s ease-in-out;
@@ -54,7 +58,7 @@
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4 md:p-8">
+<body class="p-4 md:p-8">
 
     <!-- メインゲームコンテナ -->
     <div id="gameContainer" class="container bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-lg space-y-6">
@@ -237,6 +241,11 @@
             hideModal(); // モーダルを非表示に
             submitBtn.classList.add('hidden');
             answerInput.classList.add('hidden');
+
+            // 入力フィールドにフォーカスが当たったときに自動スクロール
+            answerInput.addEventListener('focus', () => {
+                answerInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
         });
     </script>
 </body>
