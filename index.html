@@ -89,18 +89,18 @@
 
         <!-- カスタムキーボード -->
         <div id="keyboard" class="grid grid-cols-3 gap-2 mt-4">
-            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-300 transition-colors" data-value="1">1</button>
-            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-300 transition-colors" data-value="2">2</button>
-            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-300 transition-colors" data-value="3">3</button>
-            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-300 transition-colors" data-value="4">4</button>
-            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-300 transition-colors" data-value="5">5</button>
-            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-300 transition-colors" data-value="6">6</button>
-            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-300 transition-colors" data-value="7">7</button>
-            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-300 transition-colors" data-value="8">8</button>
-            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-300 transition-colors" data-value="9">9</button>
-            <button class="bg-gray-400 text-white text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-500 transition-colors" id="clearBtn">C</button>
-            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-300 transition-colors" data-value="0">0</button>
-            <button class="bg-gray-400 text-white text-2xl font-bold rounded-lg p-3 shadow-md active:bg-gray-500 transition-colors" id="backspaceBtn">←</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-300 transition-colors" data-value="1">1</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-300 transition-colors" data-value="2">2</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-300 transition-colors" data-value="3">3</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-300 transition-colors" data-value="4">4</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-300 transition-colors" data-value="5">5</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-300 transition-colors" data-value="6">6</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-300 transition-colors" data-value="7">7</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-300 transition-colors" data-value="8">8</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-300 transition-colors" data-value="9">9</button>
+            <button class="bg-gray-400 text-white text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-500 transition-colors" id="clearBtn">C</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-300 transition-colors" data-value="0">0</button>
+            <button class="bg-gray-400 text-white text-2xl font-bold rounded-lg p-2 shadow-md active:bg-gray-500 transition-colors" id="backspaceBtn">←</button>
         </div>
 
         <!-- 送信ボタン -->
@@ -253,7 +253,12 @@
 
                 if (value !== undefined) {
                     if (currentAnswer.length < 8) { // 入力桁数を制限
-                        answerDisplay.innerText += value;
+                        const newAnswer = currentAnswer + value;
+                        answerDisplay.innerText = newAnswer;
+                        // Check if the answer has 2 digits and submit automatically
+                        if (newAnswer.length >= 2) {
+                            checkAnswer();
+                        }
                     }
                 } else if (target.id === 'backspaceBtn') {
                     answerDisplay.innerText = currentAnswer.slice(0, -1);
