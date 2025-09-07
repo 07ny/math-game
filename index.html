@@ -12,7 +12,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f0f4f8;
-            padding-bottom: 250px; /* キーボードのためのスペースを確保 */
+            /* No padding needed, as keyboard is now part of the main UI */
         }
         .container {
             transition: transform 0.3s ease-in-out;
@@ -80,14 +80,30 @@
         <!-- 問題表示 -->
         <div id="numbers" class="text-4xl md:text-5xl font-extrabold text-gray-800 text-center tracking-wide"></div>
 
-        <!-- 入力表示エリアと送信ボタン -->
-        <div class="flex flex-col md:flex-row gap-4">
-            <div id="answerDisplay" class="flex-1 p-4 rounded-xl border-2 border-gray-300 bg-gray-100 text-center text-xl min-h-[56px] flex items-center justify-center"></div>
-            <button id="submitBtn"
-                    class="bg-blue-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 active:scale-95">
-                送信
-            </button>
+        <!-- 入力表示エリア -->
+        <div id="answerDisplay" class="p-4 rounded-xl border-2 border-gray-300 bg-gray-100 text-center text-xl min-h-[56px] flex items-center justify-center font-bold"></div>
+
+        <!-- カスタムキーボード -->
+        <div id="keyboard" class="grid grid-cols-3 gap-2 mt-4">
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="1">1</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="2">2</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="3">3</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="4">4</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="5">5</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="6">6</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="7">7</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="8">8</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="9">9</button>
+            <button class="bg-gray-400 text-white text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-500 transition-colors" id="clearBtn">C</button>
+            <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="0">0</button>
+            <button class="bg-gray-400 text-white text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-500 transition-colors" id="backspaceBtn">←</button>
         </div>
+
+        <!-- 送信ボタン -->
+        <button id="submitBtn"
+                class="w-full bg-blue-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 active:scale-95">
+            送信
+        </button>
 
         <!-- ゲーム開始ボタン -->
         <button id="startBtn"
@@ -104,23 +120,6 @@
             <button id="playAgainBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">もう一度プレイ</button>
         </div>
     </div>
-
-    <!-- カスタムキーボード -->
-    <div id="keyboard" class="fixed bottom-0 left-0 right-0 bg-gray-200 p-4 border-t-2 border-gray-300 transform translate-y-full transition-transform duration-300 grid grid-cols-3 gap-2">
-        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="1">1</button>
-        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="2">2</button>
-        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="3">3</button>
-        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="4">4</button>
-        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="5">5</button>
-        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="6">6</button>
-        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="7">7</button>
-        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="8">8</button>
-        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="9">9</button>
-        <button class="bg-gray-400 text-white text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-500 transition-colors" id="clearBtn">C</button>
-        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="0">0</button>
-        <button class="bg-gray-400 text-white text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-500 transition-colors" id="backspaceBtn">←</button>
-    </div>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -158,7 +157,6 @@
                 startBtn.classList.add('hidden');
                 submitBtn.classList.remove('hidden');
                 answerDisplay.innerText = "";
-                keyboard.classList.remove('translate-y-full'); // キーボードを表示
                 generateNumbers();
             };
 
@@ -223,7 +221,6 @@
                 finalScore.innerText = streak;
                 startBtn.classList.remove('hidden');
                 submitBtn.classList.add('hidden');
-                keyboard.classList.add('translate-y-full'); // キーボードを非表示
             };
 
             // モーダルを表示
@@ -270,7 +267,6 @@
             updateStats();
             hideModal();
             submitBtn.classList.add('hidden');
-            keyboard.classList.add('translate-y-full');
         });
     </script>
 </body>
