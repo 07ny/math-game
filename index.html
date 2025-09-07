@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>数字ゲーム</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+    button { padding: 10px 20px; font-size: 16px; }
+    input { padding: 5px; font-size: 16px; width: 50px; text-align: center; }
+    #result { margin-top: 20px; font-size: 18px; }
+  </style>
+</head>
+<body>
+
+  <h1>数字ゲーム</h1>
+  <p>4つの数字の合計を入力してください！</p>
+
+  <div id="numbers"></div>
+  <br>
+  <input type="number" id="answer" placeholder="合計">
+  <button onclick="checkAnswer()">送信</button>
+
+  <div id="result"></div>
+  <div id="stats"></div>
+
+  <script>
+    let numbers = [];
+    let startTime;
+    let streak = 0;
+
+    function generateNumbers() {
+      numbers = [];
+      for(let i=0; i<4; i++){
+        numbers.push(Math.floor(Math.random() * 9) + 1); // 1〜9の数字
+      }
+      document.getElementById("numbers").innerText = numbers.join(" + ");
+      startTime = new Date(); // スタート時間
+    }
+
+    function checkAnswer() {
+      const answer = parseInt(document.getElementById("answer").value);
+      const sum = numbers.reduce((a,b)=>a+b,0);
+      const endTime = new Date();
+      const timeTaken = ((endTime - startTime)/1000).toFixed(2);
+
+      if(answer === sum){
+        streak += 1;
+        document.getElementById("result").innerText = `正解！かかった時間: ${timeTaken} 秒`;
+      } else {
+        streak = 0;
+        document.getElementById("result").innerText = `不正解…答えは ${sum} です`;
+      }
+
+      document.getElementById("stats").innerText = `連続正解: ${streak}`;
+      document.getElementById("answer").value = "";
+      generateNumbers(); // 次の問題
+    }
+
+    generateNumbers(); // 最初の問題を生成
+  </script>
+
+</body>
+</html>
