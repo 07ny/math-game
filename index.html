@@ -12,6 +12,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f0f4f8;
+            padding-bottom: 250px; /* キーボードのためのスペースを確保 */
         }
         .container {
             transition: transform 0.3s ease-in-out;
@@ -79,10 +80,9 @@
         <!-- 問題表示 -->
         <div id="numbers" class="text-4xl md:text-5xl font-extrabold text-gray-800 text-center tracking-wide"></div>
 
-        <!-- 入力と送信ボタン -->
+        <!-- 入力表示エリアと送信ボタン -->
         <div class="flex flex-col md:flex-row gap-4">
-            <input type="number" id="answerInput" placeholder="合計"
-                   class="flex-1 p-4 rounded-xl border-2 border-gray-300 focus:ring-4 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-center text-xl">
+            <div id="answerDisplay" class="flex-1 p-4 rounded-xl border-2 border-gray-300 bg-gray-100 text-center text-xl min-h-[56px] flex items-center justify-center"></div>
             <button id="submitBtn"
                     class="bg-blue-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 active:scale-95">
                 送信
@@ -105,12 +105,29 @@
         </div>
     </div>
 
+    <!-- カスタムキーボード -->
+    <div id="keyboard" class="fixed bottom-0 left-0 right-0 bg-gray-200 p-4 border-t-2 border-gray-300 transform translate-y-full transition-transform duration-300 grid grid-cols-3 gap-2">
+        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="1">1</button>
+        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="2">2</button>
+        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="3">3</button>
+        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="4">4</button>
+        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="5">5</button>
+        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="6">6</button>
+        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="7">7</button>
+        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="8">8</button>
+        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="9">9</button>
+        <button class="bg-gray-400 text-white text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-500 transition-colors" id="clearBtn">C</button>
+        <button class="bg-white text-gray-800 text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-300 transition-colors" data-value="0">0</button>
+        <button class="bg-gray-400 text-white text-2xl font-bold rounded-lg p-4 shadow-md active:bg-gray-500 transition-colors" id="backspaceBtn">←</button>
+    </div>
+
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // DOM要素を取得
             const gameContainer = document.getElementById('gameContainer');
             const numbersEl = document.getElementById('numbers');
-            const answerInput = document.getElementById('answerInput');
+            const answerDisplay = document.getElementById('answerDisplay');
             const submitBtn = document.getElementById('submitBtn');
             const startBtn = document.getElementById('startBtn');
             const streakDisplay = document.getElementById('streakDisplay');
@@ -120,6 +137,7 @@
             const gameOverModal = document.getElementById('gameOverModal');
             const finalScore = document.getElementById('finalScore');
             const playAgainBtn = document.getElementById('playAgainBtn');
+            const keyboard = document.getElementById('keyboard');
 
             // ゲームの状態変数
             let numbers = [];
@@ -139,9 +157,9 @@
                 updateStats();
                 startBtn.classList.add('hidden');
                 submitBtn.classList.remove('hidden');
-                answerInput.classList.remove('hidden');
+                answerDisplay.innerText = "";
+                keyboard.classList.remove('translate-y-full'); // キーボードを表示
                 generateNumbers();
-                answerInput.focus();
             };
 
             // 問題を生成
@@ -179,7 +197,7 @@
             // 答えを確認
             const checkAnswer = () => {
                 if (!gameActive) return;
-                const answer = parseInt(answerInput.value);
+                const answer = parseInt(answerDisplay.innerText);
                 const sum = numbers.reduce((a, b) => a + b, 0);
 
                 if (answer === sum) {
@@ -192,10 +210,9 @@
                     return; // 不正解の場合はゲーム終了
                 }
 
-                answerInput.value = "";
+                answerDisplay.innerText = "";
                 updateStats();
                 generateNumbers();
-                answerInput.focus();
             };
 
             // ゲームオーバー
@@ -206,7 +223,7 @@
                 finalScore.innerText = streak;
                 startBtn.classList.remove('hidden');
                 submitBtn.classList.add('hidden');
-                answerInput.classList.add('hidden');
+                keyboard.classList.add('translate-y-full'); // キーボードを非表示
             };
 
             // モーダルを表示
@@ -225,31 +242,35 @@
                 levelDisplay.innerText = `レベル: ${level}`;
             };
 
+            // キーボード入力の処理
+            keyboard.addEventListener('click', (e) => {
+                const target = e.target;
+                if (!target.tagName === 'BUTTON' || !gameActive) return;
+
+                const value = target.dataset.value;
+                const currentAnswer = answerDisplay.innerText;
+
+                if (value !== undefined) {
+                    if (currentAnswer.length < 8) { // 入力桁数を制限
+                        answerDisplay.innerText += value;
+                    }
+                } else if (target.id === 'backspaceBtn') {
+                    answerDisplay.innerText = currentAnswer.slice(0, -1);
+                } else if (target.id === 'clearBtn') {
+                    answerDisplay.innerText = "";
+                }
+            });
+
             // イベントリスナー
             startBtn.addEventListener('click', startGame);
             submitBtn.addEventListener('click', checkAnswer);
-            answerInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    checkAnswer();
-                }
-            });
             playAgainBtn.addEventListener('click', startGame);
 
             // 初回表示
             updateStats();
-            hideModal(); // モーダルを非表示に
+            hideModal();
             submitBtn.classList.add('hidden');
-            answerInput.classList.add('hidden');
-
-            // 入力フィールドにフォーカスが当たったときにbodyのスクロールを無効化
-            answerInput.addEventListener('focus', () => {
-                document.body.style.overflow = 'hidden';
-            });
-
-            // 入力フィールドからフォーカスが外れたときにbodyのスクロールを有効化
-            answerInput.addEventListener('blur', () => {
-                document.body.style.overflow = '';
-            });
+            keyboard.classList.add('translate-y-full');
         });
     </script>
 </body>
