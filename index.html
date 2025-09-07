@@ -12,7 +12,6 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f0f4f8;
-            /* モバイルでの画面ずれを防ぐため、min-h-screenを削除 */
         }
         .container {
             transition: transform 0.3s ease-in-out;
@@ -242,9 +241,14 @@
             submitBtn.classList.add('hidden');
             answerInput.classList.add('hidden');
 
-            // 入力フィールドにフォーカスが当たったときに自動スクロール
+            // 入力フィールドにフォーカスが当たったときにbodyのスクロールを無効化
             answerInput.addEventListener('focus', () => {
-                answerInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.body.style.overflow = 'hidden';
+            });
+
+            // 入力フィールドからフォーカスが外れたときにbodyのスクロールを有効化
+            answerInput.addEventListener('blur', () => {
+                document.body.style.overflow = '';
             });
         });
     </script>
